@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header dengan tombol Logout -->
+    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1>Aplikasi Pembukuan Keuangan</h1>
+        <form method="GET" action="/logout">
+            <button type="submit" class="logout-button">Logout</button>
+        </form>
+    </header>
+
+    <!-- Tampilkan Saldo -->
+    <h2>Saldo: Rp {{ balance }}</h2>
+
+    <!-- Form Tambah Transaksi -->
+    <form method="POST" action="/add">
+        <select name="type" required>
+            <option value="Pemasukan">Pemasukan</option>
+            <option value="Pengeluaran">Pengeluaran</option>
+        </select>
+        <input type="number" step="0.01" name="amount" placeholder="Jumlah" required>
+        <input type="date" name="date" required>
+        <input type="text" name="note" placeholder="Catatan">
+        <button type="submit">Tambah Transaksi</button>
+    </form>
+
+    <!-- Riwayat Transaksi -->
+    <h2>Riwayat Transaksi</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Jenis</th>
+            <th>Jumlah</th>
+            <th>Tanggal</th>
+            <th>Catatan</th>
+            <th>Aksi</th>
+        </tr>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction[0] }}</td>
+            <td>{{ transaction[2] }}</td>
+            <td>{{ transaction[3] }}</td>
+            <td>{{ transaction[4] }}</td>
+            <td>{{ transaction[5] }}</td>
+            <td>
+                <form method="POST" action="/delete/{{ transaction[0] }}">
+                    <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus transaksi ini?')">Hapus</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Reset Semua Transaksi -->
+    <form method="POST" action="/reset" style="margin-top: 20px;">
+        <button type="submit" onclick="return confirm('Apakah Anda yakin ingin mereset semua transaksi?')">Reset Semua Transaksi</button>
+    </form>
+
+    <footer>
+        <p>Developed by <strong>Kelompok C</strong> - 2024</p>
+    </footer>
+</body>
+</html>
